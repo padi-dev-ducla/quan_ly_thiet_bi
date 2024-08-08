@@ -22,7 +22,9 @@ export class AuthController extends BaseController {
     try {
       const user = await this.authService.login(loginDto.email, loginDto.password)
       const token = await this.tokenService.generateAuthTokens(user)
-      return this.setMessage('Đăng nhập thành công').setData(token).responseSuccess(res)
+      return this.setMessage('Đăng nhập thành công')
+        .setData({ user: { email: user.email, password: user.password }, token })
+        .responseSuccess(res)
     } catch (e) {
       return this.setCode(e.httpCode).setMessage(e.message).responseErrors(res)
     }
